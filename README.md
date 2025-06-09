@@ -640,27 +640,47 @@ Write a querry to update the status of books in the books table to "Yes" when th
 
 
 
- /* Task 15. Branch performance Report
-Create a querry that generates a performance report for each branch, showing the number of books issued, the number of books returned, and the total revenue generated from rentals. */
+  ****Task 15. Branch performance Report**
+  
+**Create a querry that generates a performance report for each branch, showing the number of books issued, the number of books returned, and the total revenue generated from rentals.** 
 
 	CREATE TABLE branch_reports
+ 
 	AS
+ 
 	SELECT 
+ 
 	   b.branch_id,
+    
 	   b.manager_id,
+    
 	   COUNT(ist.issued_id) AS number_book_issued,
+    
 	   COUNT(rs.return_id) AS number_of_book_return,
+    
 	   SUM(bk.rental_price) as total_revenue
+    
+    
 	FROM issued_status AS ist
+ 
 	JOIN
+ 
 	employees AS e
+ 
 	ON e.emp_id = ist.issued_emp_id
+ 
 	JOIN
+ 
 	branch AS b
+ 
 	ON e.branch_id = b.branch_id
+ 
 	LEFT JOIN
+ 
 	return_status AS rs
+ 
 	ON rs.issued_id = ist.issued_id
+ 
 	JOIN
  
 	books AS bk
