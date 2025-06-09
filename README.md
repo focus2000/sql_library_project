@@ -384,5 +384,86 @@ REFERENCES issued_status(issued_id);
  
 
 
+
+**4. Data Analysis & Findings**
+
+The following SQL queries were used to address specific questions:
+
+ **Task 7. Retrieve all books in a specific category.** 
+
+		SELECT * FROM books
+  
+		WHERE category = 'Children';
+  
+
+ **Task 8. Find Total Rental income by each category.** 
+
+		SELECT 
+  
+		category,
+  
+		SUM(rental_price) as Total_rental_income
+  
+		FROM books
+  
+		GROUP BY 1;
+  
+
+**OR(method 2 to avoid multiple entries, use JOIN statement)**
+
+		SELECT 
+  
+		category,
+  
+		SUM(rental_price) as Total_rental_income
+  
+		FROM books as b
+  
+		JOIN
+  
+		issued_status as ist
+  
+		ON ist.issued_book_isbn = b.isbn
+  
+		GROUP BY 1;
+  
+
+**Task 9. List members who registered in the last 180 days :**
+
+		SELECT *
+  
+		FROM members
+  
+		WHERE reg_date >= CURRENT_DATE() - INTERVAL 180 DAY;
+  
+    
+  **Task 10. List Employees with their Branch Manager's Name and their branch details.** 
+    
+		SELECT 
+  
+			el.*,
+   
+			b.manager_id,
+   
+		   e2.emp_name AS Manager,
+     
+			b.branch_address AS Branch_details
+   
+			FROM employees AS el
+   
+			JOIN
+   
+			branch AS b
+   
+                        ON b.branch_id = el.branch_id
+   
+			JOIN
+   
+			employees AS e2
+   
+			ON b.manager_id = e2.emp_id;
+   
+        
+	
  
  
