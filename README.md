@@ -8,9 +8,12 @@ This project demonstrates the implementation of a Library Management System usin
 ****Objectives** :**
 
 Set up the Library Management System Database: Create and populate the database with tables for branches, employees, members, books, issued status, and return status.
-CRUD Operations: Perform Create, Read, Update, and Delete operations on the data.
-CTAS (Create Table As Select): Utilize CTAS to create new tables based on query results.
-Advanced SQL Queries: Develop complex queries to analyze and retrieve specific data.
+
+**CRUD Operations:** Perform Create, Read, Update, and Delete operations on the data.
+
+**CTAS (Create Table As Select):** Utilize CTAS to create new tables based on query results.
+
+**Advanced SQL Queries: **Develop complex queries to analyze and retrieve specific data.
 
 **Database Creation:** Created a database named l**ibrary_project_2**
 
@@ -43,6 +46,7 @@ DROP TABLE IF EXISTS books;
 CREATE TABLE books (
 
 	isbn VARCHAR(20) PRIMARY KEY,
+ 
         book_title VARCHAR(75),	
 	
 	category VARCHAR(10),
@@ -142,33 +146,54 @@ CREATE TABLE return_status (
 -- IDENTIFYING FOREIGN KEYS (FK)
 
 ALTER TABLE issued_status
+
 ADD CONSTRAINT fk_members
-FOREIGN KEY (issued_member_id) 
-REFERENCES members(member_id); 
+
+FOREIGN KEY (issued_member_id)
+
+REFERENCES members(member_id);
+
 
 
 ALTER TABLE issued_status
+
 ADD CONSTRAINT fk_books
+
 FOREIGN KEY (issued_book_isbn)
+
 REFERENCES books(isbn);
 
 
+
 ALTER TABLE issued_status
+
 ADD CONSTRAINT fk_employees
+
 FOREIGN KEY (issued_emp_id)
+
 REFERENCES employees(emp_id);
 
 
+
 ALTER TABLE employees
+
 ADD CONSTRAINT fk_branch
+
 FOREIGN KEY (branch_id)
+
 REFERENCES branch(branch_id);
 
 
+
 ALTER TABLE return_status
+
 ADD CONSTRAINT fk_issued_status
+
 FOREIGN KEY (issued_id)
+
 REFERENCES issued_status(issued_id);
 
 
+
 SELECT * FROM return_status
+
