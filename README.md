@@ -463,6 +463,174 @@ The following SQL queries were used to address specific questions:
    
 			ON b.manager_id = e2.emp_id;
    
+
+   -- **Task 11. Create a table of Books with Rental Price Above a certain Threshold of '7USD'**
+   
+		CREATE TABLE books_price_above_7USD
+  
+		AS
+  
+			SELECT * FROM books
+   
+			WHERE rental_price > 7;
+			
+			SELECT * FROM books_price_above_7usd;
+			
+
+  
+	-- **TAsk 12. Retrieve the List of books not been returned.** 
+		SELECT 
+			DISTINCT ist.issued_book_name
+			FROM issued_status As ist
+			LEFT JOIN
+			return_status AS rs
+			ON ist.issued_id = rs.issued_id
+			WHERE rs.return_id IS NULL;
+        
+**Task 13. Identify Members with Overdue Books
+Write a Querry to identify members who have overdue books (assume a 30-day return period). Display the member's_id, members's_name, book_title, issue_date, and days overdue.
+    **
+     Steps to follow: 
+     join the following tables : issued_status, members, books return_status
+     filter books which are return
+     **Overdue > 30days
+    
+		SELECT 
+  
+			ist.issued_member_id,
+   
+			m.member_name,
+   
+			bk.book_title,
+   
+			ist.issued_date,
+   
+			-- rs.return_date,
+   
+			CURRENT_DATE-ist.issued_date AS Overdue_days
+   
+		FROM issued_status AS ist
+  
+		JOIN
+  
+		members AS m
+  
+			  ON m.member_id = ist.issued_member_id
+     
+		JOIN
+  
+		books AS bk
+  
+		ON bk.isbn = ist.issued_book_isbn
+  
+		 LEFT JOIN
+   
+		return_status AS rs
+  
+		ON rs.issued_id = ist.issued_id
+  
+		WHERE rs.return_date IS NULL
+  
+			 AND
+    
+		(CURRENT_DATE - ist.issued_date) > 30
+  
+		ORDER BY 1;
+  
+
+ **Task 14: Update Book status on Return
+Write a querry to update the status of books in the books table to "Yes" when they are returned(based on entries in the return_status table).** 
+
+
+ **Testing functions**
+
+		SELECT * FROM issued_status;
+  
+		SELECT * FROM books
+  
+		WHERE isbn = '978-0-307-58837-1';
+  
+		
+		SELECT * FROM issued_status
+  
+		WHERE issued_book_isbn = '978-0-307-58837-1'
+  
+
+		SELECT * FROM return_status
+  
+		WHERE issued_id = 'IS135'
+  
+
+ **Use STORED PROCEDURES**
+
+	DELIMITER $$
+ 
+	CREATE PROCEDURE add_return_records(
+ 
+	IN p_return_id VARCHAR(10),
+ 
+	IN p_issued_id VARCHAR(10),
+ 
+	IN p_book_quality VARCHAR(15)
+ 
+	)
+ 
+	BEGIN
+ 
+	-- All your logic and codes here
+ 
+
+	DECLARE v_isbn VARCHAR(50);
+ 
+	DECLARE v_book_name VARCHAR(80);
+ 
+
+	-- Insert into return_status table.
+ 
+ 
+	INSERT INTO return_status(return_id, issued_id, return_date, book_quality)
+ 
+	VALUES
+ 
+	(p.return_id, p_issued_id, CURRENT_DATE, p.book_quality);
+ 
+ 
+
+	SELECT
+ 
+	  issued_book_isbn,
+   
+	  issued_book_name
+   
+	  INTO
+   
+	  v_isbn,
+   
+	  v_book_name
+   
+	  FROM issued_status
+   
+	  WHERE issued_id = p_issued_id;
+   
+	  
+	  UPDATE books
+   
+	  SET status = 'yes'
+   
+	  WHERE isbn = v_isbn;
+   
+	  
+	  SELECT CONCAT('Thank you for returning the book: ', v_book_name) AS message;
+   
+	  END $$
+   
+	  DELIMITER ;
+   
+
+	CALL add_return_records('RS138', 'IS135', 'Good');
+ 
+
+   
         
 	
  
