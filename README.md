@@ -477,19 +477,27 @@ The following SQL queries were used to address specific questions:
 			SELECT * FROM books_price_above_7usd;
 			
 
-  
-	-- **TAsk 12. Retrieve the List of books not been returned.** 
+  **
+	**TAsk 12. Retrieve the List of books not been returned.******
 		SELECT 
 			DISTINCT ist.issued_book_name
+   
 			FROM issued_status As ist
+   
 			LEFT JOIN
+   
 			return_status AS rs
+   
 			ON ist.issued_id = rs.issued_id
+   
 			WHERE rs.return_id IS NULL;
+   
         
-**Task 13. Identify Members with Overdue Books
+****Task 13. Identify Members with Overdue Books**
+
 Write a Querry to identify members who have overdue books (assume a 30-day return period). Display the member's_id, members's_name, book_title, issue_date, and days overdue.
-    **
+
+    
      Steps to follow: 
      join the following tables : issued_status, members, books return_status
      filter books which are return
@@ -628,6 +636,177 @@ Write a querry to update the status of books in the books table to "Yes" when th
    
 
 	CALL add_return_records('RS138', 'IS135', 'Good');
+
+
+
+
+ /* Task 15. Branch performance Report
+Create a querry that generates a performance report for each branch, showing the number of books issued, the number of books returned, and the total revenue generated from rentals. */
+
+	CREATE TABLE branch_reports
+	AS
+	SELECT 
+	   b.branch_id,
+	   b.manager_id,
+	   COUNT(ist.issued_id) AS number_book_issued,
+	   COUNT(rs.return_id) AS number_of_book_return,
+	   SUM(bk.rental_price) as total_revenue
+	FROM issued_status AS ist
+	JOIN
+	employees AS e
+	ON e.emp_id = ist.issued_emp_id
+	JOIN
+	branch AS b
+	ON e.branch_id = b.branch_id
+	LEFT JOIN
+	return_status AS rs
+	ON rs.issued_id = ist.issued_id
+	JOIN
+ 
+	books AS bk
+ 
+	ON ist.issued_book_isbn = bk.isbn
+ 
+	GROUP BY 1,2;
+ 
+
+	SELECT * FROM branch_reports;
+ 
+
+ **Task 16. CTAS: Create a table of Active Members**
+**Use the CREATE TABLE As (CTAS) statement to create a new table active_members containing members who have issued at least one book in the last 15 months**.
+
+	CREATE TABLE active_members
+ 
+	AS
+ 
+	SELECT * FROM members
+ 
+	WHERE member_id IN (
+ 
+		  SELECT 
+    
+	  DISTINCT issued_member_id
+   
+	FROM issued_status
+ 
+	WHERE
+ 
+	  issued_date >= CURRENT_DATE () - INTERVAL 15 month
+   
+	  );
+   
+	  
+	  SELECT * FROM active_members;
+  
+  
+  
+   **Task 17. Find Employees with the Most Book issues processed**
+   
+  **Write a querry to find the top 3 employees who have processed the most book issues. Display the employee name, number of books processed and their branch.** 
+  
+	  SELECT 
+		e.emp_name,
+  
+		b.*,
+  
+		COUNT(ist.issued_id )AS no_book_issued
+  
+	  FROM issued_status AS ist
+   
+	  JOIN
+   
+	  employees AS e
+   
+	  ON e.emp_id = ist.issued_emp_id
+   
+	  JOIN
+   
+	  branch AS b
+   
+	  ON e.branch_id = b.branch_id
+   
+	  GROUP BY 1,2**
+  
+  ***Task 18. Stored Procedure Objectives**: 
+  
+  **create a stored procedure to manage the status of books in a library system.**
+  **Description : Write a stored procedure that updates the status of a book in the library based on its issuance. 
+  the procedure should function** **as follows**: 
+  
+  **The stored procedure should take the book_id as an input parameter**.
+  **The procedure should first check if the book is avialble (status = 'yes'). if the book is available, it should be issued,** \
+  **and the status in the books table should be updated to 'no' if the book is not avialble (status = 'no'), 
+  the procedure should return an error message indicating that the book is currently not avialable.** 
+  
+   **SOLUTION**
+  
+	  DELIMITER $$
+   
+	  CREATE PROCEDURE issue_book(
+   
+	  p_issued_id VARCHAR(10), 
+   
+	  p_issued_member_id VARCHAR(30),
+   
+	  p_issued_book_isbn VARCHAR(50),
+   
+	  p_issued_emp_id VARCHAR(10)
+   
+	  ) 
+	 
+	  BEGIN
+   
+	   -- All Varaibles
+    
+		DECLARE v_status VARCHAR(10);
+  
+	  -- All Codes
+   
+	  -- checking if book is available 'yes'
+   
+	  SELECT status INTO v_status
+   
+	  FROM books
+   
+   
+	  WHERE isbn = p_issued_book_isbn;
+   
+   
+   
+	  IF v_status = 'yes' THEN
+   
+		INSERT INTO   issued_status(issued_id,issued_member_id, issued_date, issued_book_isbn, issued_emp_id)
+  
+		VALUES(p_issued_id, p_issued_member_id, CURRENT_DATE, p_issued_book_isbn, p_issued_emp_id); 
+  
+		SELECT CONCAT('Book records added successfully for book isbn : ', p_issued_book_isbn) AS message;
+  
+  
+			
+			UPDATE books
+   
+			SET status = 'no'
+   
+   
+			WHERE isbn = p_issued_book_isbn;
+   
+	  
+	   ELSE
+    
+		SELECT CONCAT('Sorry to inform you the book you have requested is unavailable book_isbn: ', p_issued_book_isbn) AS message;
+  
+	  END IF;
+   
+	  END $$
+   
+	  
+	  DELIMITER ;
+   
+	  CALL issue_book('IS155', 'C108', '978-0-553-29698-2', 'E104');
+   
+	  
+	  CALL issue_book('IS156', 'C108', '978-0-375-41398-8', 'E104');
  
 
    
