@@ -225,25 +225,31 @@ REFERENCES issued_status(issued_id);
 
  **TASK 1. create a new book record** == "978-1-60129-456-2", 'To kill a mockingbird', 'classic', 6.00, 'yes', 'Harper lee', 'J.B lippincout'
  
-...sql
 	INSERT INTO books(isbn, book_title, category, rental_price, status, author, publisher)
+ 
 	VALUES('978-1-60129-456-2', 'To kill a mockingbird', 'classic', 6.00, 'yes', 'Harper lee', 'J.B lippincout');
+ 
 	SELECT * FROM books;
-...
-**Task 1b Create a new members record** == ('C120','Ken', '145 Main st', '2025-06-01'),
-    ('C121','Focus', '133 Main st', '2025-05-01')
 
-...sql
+ 
+**Task 1b Create a new members record** == ('C120','Ken', '145 Main st', '2025-06-01'),
+
+    ('C121','Focus', '133 Main st', '2025-05-01')
+    
+
+
 	INSERT INTO members(member_id, member_name, member_address, reg_date)
+ 
 	VALUES
+ 
 	('C120','Ken', '145 Main st', '2025-06-01'),
 	('C121','Focus', '133 Main st', '2025-05-01');
- ...
+ 
 
 
  **Task 2. Update an existing member's Address**
 
- ...sql
+ 
 	UPDATE members
  
 	SET member_address = '125 Main st'
@@ -253,18 +259,29 @@ REFERENCES issued_status(issued_id);
 	SELECT * 
  
 	FROM members;
- ...
+ 
  
 
 **Task 2b Update an existing member's Name and Address.**
+
 	UPDATE members
+ 
 	SET member_name = 'Kachi Focus', member_address = '200 Main st'
+ 
 	WHERE member_id = 'C102' ;
+ 
 	SELECT *
+ 
 	FROM members ;
+ 
 
 **Task 3. Delete a Record from the Issued status Table -- Objective: Delete the record with issued_id = 'IS121' from the issued_status table.**
+
 	DELETE FROM issued_status
+ 
 	WHERE issued_id = 'IS121';
+ 
 	SELECT *
+ 
 	FROM issued_status ;
+ 
