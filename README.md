@@ -155,6 +155,9 @@ REFERENCES members(member_id);
 
 
 
+
+
+
 ALTER TABLE issued_status
 
 ADD CONSTRAINT fk_books
@@ -165,6 +168,9 @@ REFERENCES books(isbn);
 
 
 
+
+
+
 ALTER TABLE issued_status
 
 ADD CONSTRAINT fk_employees
@@ -172,6 +178,10 @@ ADD CONSTRAINT fk_employees
 FOREIGN KEY (issued_emp_id)
 
 REFERENCES employees(emp_id);
+
+
+
+
 
 
 
