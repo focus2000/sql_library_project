@@ -33,13 +33,18 @@ CREATE TABLE branch(
 
 
 ALTER TABLE branch 
+
 MODIFY COLUMN contact_no VARCHAR(20);
 
 
 
+
 DROP TABLE IF EXISTS books;
+
 CREATE TABLE books (
+
 	isbn VARCHAR(20) PRIMARY KEY,
+ 
 	book_title VARCHAR(75),	
 	category VARCHAR(10),
 	rental_price FLOAT,
