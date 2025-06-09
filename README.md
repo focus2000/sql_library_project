@@ -43,11 +43,12 @@ MODIFY COLUMN contact_no VARCHAR(20);
 
 
 DROP TABLE IF EXISTS books;
+
 CREATE TABLE books (
 
 	isbn VARCHAR(20) PRIMARY KEY,
  
- book_title VARCHAR(75),	
+       book_title VARCHAR(75),	
 	
 	category VARCHAR(10),
  
@@ -284,4 +285,32 @@ REFERENCES issued_status(issued_id);
 	SELECT *
  
 	FROM issued_status ;
+
+
+
+ **Task 4. Retrieve all Books issued by a specific employee -- Objective: Retrieve all books issued by the employee with emp_id = 'E101'. **
+ 
+
+	SELECT *
+ 
+	FROM issued_status 
+ 
+	WHERE issued_emp_id = 'E101';
+ 
+ 
+
+**Task 5. List Members who have issued More than one Book -- Objectives Use GROUP BY to find members who have issued more than one book. **
+
+	SELECT 
+ 
+	issued_emp_id
+ 
+	-- COUNT(issued_id) as total_book_issued
+ 
+	FROM issued_status 
+ 
+	GROUP BY issued_emp_id
+ 
+	HAVING COUNT(issued_id) >1;
+ 
  
