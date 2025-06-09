@@ -175,6 +175,8 @@ REFERENCES employees(emp_id);
 
 
 
+
+
 ALTER TABLE employees
 
 ADD CONSTRAINT fk_branch
@@ -182,6 +184,8 @@ ADD CONSTRAINT fk_branch
 FOREIGN KEY (branch_id)
 
 REFERENCES branch(branch_id);
+
+
 
 
 
