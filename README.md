@@ -302,7 +302,7 @@ REFERENCES issued_status(issued_id);
  
  
 
-****Task 5. List Members who have issued More than one Book **-- Objectives Use GROUP BY to find members who have issued more than one book. 
+**Task 5. List Members who have issued More than one Book ****-- Objectives Use GROUP BY to find members who have issued more than one book. 
 
 	SELECT 
  
@@ -315,5 +315,74 @@ REFERENCES issued_status(issued_id);
 	GROUP BY issued_emp_id
  
 	HAVING COUNT(issued_id) >1;
+
+
+** 3. CTAS (Create Table As Select)**
+
+**Task 6. Create summary Tables: Use CTAS to generate new tables based on the querry results** -- each book and total_books-issued_count. 
+
+**POV : we want to know the number of  each book  issued.**( in this case we are going to be joining two tables together"the books table and issued_status table"
+
+	 SELECT *
+  
+	 FROM books as b
+  
+	 JOIN
+  
+	 issued_status as ist
+  
+	 ON ist.issued_book_isbn = b.isbn;
+  
+	 
+ **Task 6b. The total amount of each book issued. **
+ 
+	 SELECT 
+  
+	  b.isbn,
+   
+	  b.book_title,
+   
+	 COUNT(ist.issued_id) as no_issued
+  
+	 FROM books as b
+  
+	 JOIN
+  
+	 issued_status as ist
+  
+	 ON ist.issued_book_isbn = b.isbn
+  
+	  GROUP BY 1, 2;
+   
+  
+ ** Task 6c. create a summary Table  use CTAS**
+ 
+	 CREATE TABLE book_count
+  
+	 AS
+  
+		 SELECT
+   
+		 b.isbn,
+   
+		 b.book_title,
+   
+		 COUNT(ist.issued_id) as no_issued
+   
+		 FROM books as b
+   
+		 JOIN
+   
+		 issued_status as ist
+   
+		 ON ist.issued_book_isbn = b.isbn
+   
+		 GROUP BY 1,2;
+   
+
+	SELECT * FROM book_count;
+ 
+
+
  
  
