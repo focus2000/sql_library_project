@@ -17,7 +17,7 @@ Set up the Library Management System Database: Create and populate the database 
 
 **Database Creation:** Created a database named l**ibrary_project_2**
 
-**Table Creation:** Created tables for branches, employees, members, books, issued status, and return status. Each table includes relevant columns and relationships.
+**1. Table Creation:** Created tables for branches, employees, members, books, issued status, and return status. Each table includes relevant columns and relationships.
 
 
 DROP TABLE IF EXISTS branch;
@@ -158,6 +158,8 @@ REFERENCES members(member_id);
 
 
 
+
+
 ALTER TABLE issued_status
 
 ADD CONSTRAINT fk_books
@@ -209,5 +211,29 @@ REFERENCES issued_status(issued_id);
 
 
 
-SELECT * FROM return_status
+
+**2. CRUD Operations**
+**Create:** Inserted sample records into the books table.
+
+**Read:** Retrieved and displayed data from various tables.
+
+**Update:** Updated records in the employees table.
+
+**Delete:** Removed records from the members table as needed.
+
+
+ **TASK 1. create a new book record** == "978-1-60129-456-2", 'To kill a mockingbird', 'classic', 6.00, 'yes', 'Harper lee', 'J.B lippincout'
+ 
+
+	INSERT INTO books(isbn, book_title, category, rental_price, status, author, publisher)
+	VALUES('978-1-60129-456-2', 'To kill a mockingbird', 'classic', 6.00, 'yes', 'Harper lee', 'J.B lippincout');
+	SELECT * FROM books;
+
+**Task 1b Create a new members record** == ('C120','Ken', '145 Main st', '2025-06-01'),
+('C121','Focus', '133 Main st', '2025-05-01')
+
+	INSERT INTO members(member_id, member_name, member_address, reg_date)
+	VALUES
+	('C120','Ken', '145 Main st', '2025-06-01'),
+	('C121','Focus', '133 Main st', '2025-05-01');
 
